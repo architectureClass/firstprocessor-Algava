@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    16:44:11 03/21/2017 
+-- Create Date:    13:16:24 03/27/2017 
 -- Design Name: 
--- Module Name:    Adder - Behavioral 
+-- Module Name:    ALU - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -30,22 +30,35 @@ use IEEE.std_logic_unsigned.all;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Adder is
-    Port ( OP1 : in  STD_LOGIC_Vector(31 downto 0);
-           OP2 : in  STD_LOGIC_Vector(31 downto 0);
-           RESULT : out  STD_LOGIC_Vector(31 downto 0));
-end Adder;
+entity ALU is
+    Port ( ALUop : in  STD_LOGIC_VECTOR(5 downto 0);
+           Dato1 : in  STD_LOGIC_VECTOR(31 downto 0);
+           Dato2 : in  STD_LOGIC_VECTOR(31 downto 0);
+           ALUresult : out  STD_LOGIC_VECTOR(31 downto 0));
+end ALU;
 
-architecture Behavioral of Adder is
+architecture Behavioral of ALU is
 
-	signal Result_aux : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
+	signal ALUresult_aux : STD_LOGIC_VECTOR(31 downto 0);
 
 begin
-	process(OP1,OP2)
-	begin
-		Result_aux <= OP1 + OP2;
-	end process;
+
+	process(ALUop,Dato1,Dato2)
 	
-	RESULT <= Result_aux;
+	begin
+		
+		case (ALUop) is
+			when "000000" =>
+				ALUresult_aux <= Dato1 + Dato2;
+			when others =>
+				ALUresult_aux <= (others=>'0');
+			
+		end case;
+		
+	end process;
+
+	ALUresult <= ALUresult_aux;
+
+
 end Behavioral;
 

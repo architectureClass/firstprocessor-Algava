@@ -38,17 +38,17 @@ end Program_Counter;
 
 architecture Behavioral of Program_Counter is
 
-	signal DataOut_aux : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
+	signal DataOut_aux : STD_LOGIC_VECTOR(31 downto 0) := (others =>'0');
 
 begin
 
-process(CLK)
+process(CLK,Data,RST)
 
 begin
 	
 	if (RST = '1') then
 	
-		DataOut_aux <= "00000000000000000000000000000000";
+		DataOut_aux <= (others =>'0');
 		
 	else
 	

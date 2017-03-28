@@ -41,24 +41,25 @@ end Register_File;
 
 architecture Behavioral of Register_File is
 
-	constant g0 : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
-	signal g1,g2,g3,g4,g5,g6,g7 : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
-	signal o0,o1,o2,o3,o4,o5,o6,o7 : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
-	signal l0,l1,l2,l3,l4,l5,l6,l7 : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
-	signal i0,i1,i2,i3,i4,i5,i6,i7 : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
+	constant g0 : STD_LOGIC_VECTOR(31 downto 0) := x"00000000";
+	signal g3,g4,g5,g6,g7 : STD_LOGIC_VECTOR(31 downto 0) := x"00000000";
+	signal o0,o1,o2,o3,o4,o5,o6,o7 : STD_LOGIC_VECTOR(31 downto 0) := x"00000000";
+	signal l0,l1,l2,l3,l4,l5,l6,l7 : STD_LOGIC_VECTOR(31 downto 0) := x"00000000";
+	signal i0,i1,i2,i3,i4,i5,i6,i7 : STD_LOGIC_VECTOR(31 downto 0) := x"00000000";
+	signal g1,g2 : STD_LOGIC_VECTOR(31 downto 0) := x"00000005";
 	
-	signal CRs1_aux, CRs2_aux : STD_LOGIC_VECTOR(31 downto 0) := "00000000000000000000000000000000";
+	signal CRs1_aux, CRs2_aux : STD_LOGIC_VECTOR(31 downto 0) := x"00000000";
 	
 begin
 	
-process(RST)
+process(RST,RS1,RS2,RD,DWR)
 
 	begin
 	
 	if (RST = '1') then
 	
-		CRs1_aux <= "00000000000000000000000000000000";
-		CRs2_aux <= "00000000000000000000000000000000";
+		CRs1_aux <= x"00000000";
+		CRs2_aux <= x"00000000";
 		
 	else
 		

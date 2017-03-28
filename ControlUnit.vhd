@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    16:44:11 03/21/2017 
+-- Create Date:    13:26:46 03/27/2017 
 -- Design Name: 
--- Module Name:    Adder - Behavioral 
+-- Module Name:    ControlUnit - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -19,7 +19,6 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.std_logic_unsigned.all;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -30,22 +29,41 @@ use IEEE.std_logic_unsigned.all;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Adder is
-    Port ( OP1 : in  STD_LOGIC_Vector(31 downto 0);
-           OP2 : in  STD_LOGIC_Vector(31 downto 0);
-           RESULT : out  STD_LOGIC_Vector(31 downto 0));
-end Adder;
+entity ControlUnit is
+    Port ( OP3 : in  STD_LOGIC_VECTOR(5 downto 0);
+           OP : in  STD_LOGIC_VECTOR(1 downto 0);
+           ALUop : out  STD_LOGIC_VECTOR(5 downto 0));
+end ControlUnit;
 
-architecture Behavioral of Adder is
+architecture Behavioral of ControlUnit is
 
-	signal Result_aux : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
+	signal ALUop_aux : STD_LOGIC_VECTOR(5 downto 0);
 
 begin
-	process(OP1,OP2)
-	begin
-		Result_aux <= OP1 + OP2;
-	end process;
 	
-	RESULT <= Result_aux;
+	process(OP3,OP)
+	
+	begin 
+	
+		case (OP) is
+			when "10" =>
+				
+				case (OP3) is
+					when "000000" =>
+					ALUop_aux <= "000000";
+					when others =>
+					ALUop_aux <= "111111";
+				end case;
+				
+			when others =>
+				
+				ALUop_aux <= "111111";
+				
+		end case;
+	
+	end process;
+
+	ALUop <= ALUop_aux;
+
 end Behavioral;
 
