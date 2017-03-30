@@ -57,6 +57,11 @@ architecture Behavioral of First_Processor is
            Instruction : out  STD_LOGIC_VECTOR(31 downto 0));
 	end component;
 	
+	component SEU
+	 Port ( Imm13_in : in  STD_LOGIC_VECTOR(12 downto 0);
+           Imm_out : out  STD_LOGIC_VECTOR(31 downto 0));
+	end component;
+	
 	component Register_File
 	 Port ( RS1 : in  STD_LOGIC_VECTOR(4 downto 0);
            RS2 : in  STD_LOGIC_VECTOR(4 downto 0);
@@ -65,6 +70,13 @@ architecture Behavioral of First_Processor is
            DWR : in  STD_LOGIC_VECTOR(31 downto 0);
            CRs1 : out  STD_LOGIC_VECTOR(31 downto 0);
            CRs2 : out  STD_LOGIC_VECTOR(31 downto 0));
+	end component;
+	
+	component MuxFR_ALU
+	 Port ( CRs2_in : in  STD_LOGIC_VECTOR(31 downto 0);
+           Imm : in  STD_LOGIC_VECTOR(31 downto 0);
+			  i : in STD_LOGIC;
+           CRs2_out : out  STD_LOGIC_VECTOR( 31 downto 0));
 	end component;
 	
 	component ControlUnit
@@ -80,7 +92,7 @@ architecture Behavioral of First_Processor is
            ALUresult : out  STD_LOGIC_VECTOR(31 downto 0));
 	end component;
 	
-	signal nPC_in, nPC_out, PC_out, Instruction_out, ALUresult_out, CRs1_out, CRs2_out : STD_LOGIC_VECTOR(31 downto 0);
+	signal nPC_in, nPC_out, PC_out, Instruction_out, ALUresult_out, CRs1_out, CRs2_out, Imm_aux, CRs2_imm_aux : STD_LOGIC_VECTOR(31 downto 0);
 	signal ALUop_out : STD_LOGIC_VECTOR(5 downto 0);
 
 begin
@@ -110,6 +122,11 @@ begin
 					rst => RST,
 					Instruction => Instruction_out
 		);
+		
+	SEU1 : SEU
+		port map(Imm13_in =>Instruction_out(12 downto 0),
+					Imm_out =>Imm_aux
+		);
 	
 	CU : ControlUnit
 		port map(OP => Instruction_out(31 downto 30),
@@ -127,9 +144,16 @@ begin
 					CRs2 => CRs2_out
 		);
 		
+	MUXRF_TO_ALU : MuxFR_ALU
+		port map(CRs2_in =>CRs2_out,
+					Imm => Imm_aux,
+					i => Instruction_out(13),
+					CRs2_out => CRs2_imm_aux
+		);
+		
 	ALU1 : ALU
 		port map(Dato1 => CRs1_out,
-					Dato2 => CRs2_out,
+					Dato2 => CRs2_imm_aux,
 					ALUop => ALUop_out,
 					ALUresult => ALUresult_out
 		);

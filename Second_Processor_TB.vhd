@@ -2,15 +2,15 @@
 -- Company: 
 -- Engineer:
 --
--- Create Date:   16:48:04 03/21/2017
+-- Create Date:   16:42:55 03/30/2017
 -- Design Name:   
--- Module Name:   C:/Users/utp.CRIE/Desktop/Projecto/Primerosmoludos/Adder_TB.vhd
--- Project Name:  Primerosmoludos
+-- Module Name:   C:/Users/utp.CRIE/Desktop/pp/pp/Second_Processor_TB.vhd
+-- Project Name:  pp
 -- Target Device:  
 -- Tool versions:  
 -- Description:   
 -- 
--- VHDL Test Bench Created by ISE for module: Adder
+-- VHDL Test Bench Created by ISE for module: First_Processor
 -- 
 -- Dependencies:
 -- 
@@ -27,62 +27,65 @@
 --------------------------------------------------------------------------------
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
-use IEEE.std_logic_unsigned.all;
  
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 --USE ieee.numeric_std.ALL;
  
-ENTITY Adder_TB IS
-END Adder_TB;
+ENTITY Second_Processor_TB IS
+END Second_Processor_TB;
  
-ARCHITECTURE behavior OF Adder_TB IS 
+ARCHITECTURE behavior OF Second_Processor_TB IS 
  
     -- Component Declaration for the Unit Under Test (UUT)
  
-    COMPONENT Adder
+    COMPONENT First_Processor
     PORT(
-         OP1 : IN  std_logic_vector(31 downto 0);
-         OP2 : IN  std_logic_vector(31 downto 0);
-         RESULT : OUT  std_logic_vector(31 downto 0)
+         CLK : IN  std_logic;
+         RST : IN  std_logic;
+         ALUresult : OUT  std_logic_vector(31 downto 0)
         );
     END COMPONENT;
     
 
    --Inputs
-   signal OP1 : std_logic_vector(31 downto 0) := (others => '0');
-   signal OP2 : std_logic_vector(31 downto 0) := (others => '0');
+   signal CLK : std_logic := '0';
+   signal RST : std_logic := '0';
 
  	--Outputs
-   signal RESULT : std_logic_vector(31 downto 0);
-   -- No clocks detected in port list. Replace <clock> below with 
-   -- appropriate port name 
- 
+   signal ALUresult : std_logic_vector(31 downto 0);
+
+   -- Clock period definitions
+   constant CLK_period : time := 20 ns;
  
 BEGIN
  
 	-- Instantiate the Unit Under Test (UUT)
-   uut: Adder PORT MAP (
-          OP1 => OP1,
-          OP2 => OP2,
-          RESULT => RESULT
+   uut: First_Processor PORT MAP (
+          CLK => CLK,
+          RST => RST,
+          ALUresult => ALUresult
         );
 
-   
+   -- Clock process definitions
+   CLK_process :process
+   begin 
+		CLK <= '0';
+		wait for CLK_period/2;
+		CLK <= '1';
+		wait for CLK_period/2;
+   end process;
  
 
    -- Stimulus process
    stim_proc: process
    begin		
-	
-		OP1 <= x"00000000";
-		OP2 <= "00000000000000000000000000000001";
-      wait for 100 ns;
-		
-		OP1 <= "11111111111111111111111111111101";
-		OP2 <= "11111111111111111111111111111101";
-      wait for 100 ns;
-		
+      -- hold reset state for 100 ns.
+      wait for 100 ns;	
+
+      wait for CLK_period*10;
+
+      -- insert stimulus here 
 
       wait;
    end process;

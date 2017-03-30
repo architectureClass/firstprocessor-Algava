@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    16:44:11 03/21/2017 
+-- Create Date:    16:11:26 03/30/2017 
 -- Design Name: 
--- Module Name:    Adder - Behavioral 
+-- Module Name:    MuxFR_ALU - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -19,7 +19,6 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.std_logic_unsigned.all;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -30,20 +29,36 @@ use IEEE.std_logic_unsigned.all;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Adder is
-    Port ( OP1 : in  STD_LOGIC_Vector(31 downto 0);
-           OP2 : in  STD_LOGIC_Vector(31 downto 0);
-           RESULT : out  STD_LOGIC_Vector(31 downto 0));
-end Adder;
+entity MuxFR_ALU is
+    Port ( CRs2_in : in  STD_LOGIC_VECTOR(31 downto 0);
+           Imm : in  STD_LOGIC_VECTOR(31 downto 0);
+			  i : in STD_LOGIC;
+           CRs2_out : out  STD_LOGIC_VECTOR( 31 downto 0));
+end MuxFR_ALU;
 
-architecture Behavioral of Adder is
+architecture Behavioral of MuxFR_ALU is
 
-	signal Result_aux : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
+	signal CRs2_out_aux : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
 
 begin
-	process(OP1,OP2)
+
+	process(CRs2_in, Imm, i)
+	
 	begin
-		RESULT <= OP1 + OP2;
+			
+		if (i = '0') then
+		
+			CRs2_out_aux <= CRs2_in;
+		
+		elsif (i = '1') then
+		
+			CRs2_out_aux <= Imm;		
+		
+		end if;
+		
 	end process;
+
+	CRs2_out <= CRs2_out_aux;
+
 end Behavioral;
 

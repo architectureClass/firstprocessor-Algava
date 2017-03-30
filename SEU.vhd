@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date:    16:44:11 03/21/2017 
+-- Create Date:    16:16:34 03/30/2017 
 -- Design Name: 
--- Module Name:    Adder - Behavioral 
+-- Module Name:    SEU - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -19,7 +19,6 @@
 ----------------------------------------------------------------------------------
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.std_logic_unsigned.all;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -30,20 +29,36 @@ use IEEE.std_logic_unsigned.all;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity Adder is
-    Port ( OP1 : in  STD_LOGIC_Vector(31 downto 0);
-           OP2 : in  STD_LOGIC_Vector(31 downto 0);
-           RESULT : out  STD_LOGIC_Vector(31 downto 0));
-end Adder;
+entity SEU is
+    Port ( Imm13_in : in  STD_LOGIC_VECTOR(12 downto 0);
+           Imm_out : out  STD_LOGIC_VECTOR(31 downto 0));
+end SEU;
 
-architecture Behavioral of Adder is
+architecture Behavioral of SEU is
 
-	signal Result_aux : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
+	signal Imm_out_aux : STD_LOGIC_VECTOR(31 downto 0) := (others => '0');
+	constant plus : STD_LOGIC_VECTOR(18 downto 0) := (others => '0');
+	constant minus : STD_LOGIC_VECTOR(18 downto 0) := (others => '1');
 
 begin
-	process(OP1,OP2)
+	
+	process(Imm13_in)
+	
 	begin
-		RESULT <= OP1 + OP2;
+		
+		if(Imm13_in(12) = '0') then
+		
+			Imm_out_aux <= plus&Imm13_in;
+		
+		elsif(Imm13_in(12) = '1') then
+		
+			Imm_out_aux <= minus&Imm13_in;
+		
+		end if;
+	
 	end process;
+	
+	Imm_out <= Imm_out_aux;
+
 end Behavioral;
 
