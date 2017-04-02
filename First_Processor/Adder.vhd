@@ -11,7 +11,6 @@ end Adder;
 architecture Behavioral of Adder is
 
 begin
-	
 	process(op_a,op_b)
 	begin
 		result <= op_a + op_b;
